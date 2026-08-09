@@ -31,7 +31,7 @@ client = voyageai.Client(api_key=VOYAGE_API_KEY)
 MODEL = "voyage-3"
 RRF_K = 60  # standard RRF constant; dampens the impact of very top ranks
 
-with open("data/processed/chunks_with_embeddings.json") as f:
+with open("../data/processed/chunks_with_embeddings.json") as f:
     chunks = json.load(f)
 
 texts = [c["text"] for c in chunks]
@@ -47,23 +47,31 @@ def cosine_similarity(query_vec, matrix):
     m_norm = matrix / np.linalg.norm(matrix, axis=1, keepdims=True)
     return m_norm @ q_norm
 
-def hybrid_search(query, top_k=3):
-    # --- Ranking A: BM25 ---
+def hybrid_search(query, top_k=3, semantic_weight=0.6, bm25_weight=0.4):
+    # weights should sum to 1.0, but don't strictly have to -- they're
+    # just relative trust levels between the two signals
     bm25_scores = bm25.get_scores(query.lower().split())
-    bm25_ranked = np.argsort(-bm25_scores)  # chunk indices, best first
+    bm25_ranked = np.argsort(-bm25_scores)
 
-    # --- Ranking B: semantic (one API call) ---
     result = client.embed([query], model=MODEL, input_type="query")
     query_vec = np.array(result.embeddings[0])
     sem_scores = cosine_similarity(query_vec, chunk_vectors)
     sem_ranked = np.argsort(-sem_scores)
 
-    # --- Reciprocal Rank Fusion ---
+    # --- Weighted Reciprocal Rank Fusion ---
+    # Same idea as before -- reward top ranks in each list -- but now
+    # each list's contribution is scaled by how much we trust it.
+    # BM25 gets discounted because it has no concept of meaning and can
+    # rank a chunk highly purely on coincidental word overlap (e.g. the
+    # word "senators" pulling in unrelated Election sections for a
+    # question that's actually about quorum). Semantic search is
+    # weighted higher as the primary signal, with BM25 as a supporting
+    # vote rather than an equal partner.
     rrf_scores = {}
     for rank, idx in enumerate(bm25_ranked):
-        rrf_scores[idx] = rrf_scores.get(idx, 0) + 1.0 / (RRF_K + rank)
+        rrf_scores[idx] = rrf_scores.get(idx, 0) + bm25_weight * (1.0 / (RRF_K + rank))
     for rank, idx in enumerate(sem_ranked):
-        rrf_scores[idx] = rrf_scores.get(idx, 0) + 1.0 / (RRF_K + rank)
+        rrf_scores[idx] = rrf_scores.get(idx, 0) + semantic_weight * (1.0 / (RRF_K + rank))
 
     final_ranked = sorted(rrf_scores.items(), key=lambda x: x[1], reverse=True)
 

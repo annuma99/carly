@@ -27,7 +27,7 @@ INPUT_TYPE = "document"     # Voyage distinguishes "document" vs "query" embeddi
 
 client = voyageai.Client(api_key=VOYAGE_API_KEY)
 
-with open("/Users/ananyaiyer/Documents/home_code/carly/data/processed/chunks.json") as f:
+with open("../data/processed/chunks.json") as f:
     chunks = json.load(f)
 
 texts = [c["text"] for c in chunks]
@@ -67,7 +67,7 @@ print(f"Vector dimensionality: {len(embeddings[0])}")
 for chunk, vec in zip(chunks, embeddings):
     chunk["embedding"] = vec
 
-with open("/Users/ananyaiyer/Documents/home_code/carly/data/processed/chunks_with_embeddings.json", "w") as f:
+with open("../data/processed/chunks_with_embeddings.json", "w") as f:
     json.dump(chunks, f)
 
 print("Saved to chunks_with_embeddings.json")

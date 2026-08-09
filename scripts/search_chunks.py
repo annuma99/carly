@@ -14,7 +14,6 @@ from dotenv import load_dotenv
 import numpy as np
 import voyageai
 
-
 load_dotenv()
 
 VOYAGE_API_KEY = os.getenv("VOYAGE_API_KEY")
@@ -24,7 +23,7 @@ MODEL = "voyage-3"
 
 client = voyageai.Client(api_key=VOYAGE_API_KEY)
 
-with open("/Users/ananyaiyer/Documents/home_code/carly/data/processed/chunks_with_embeddings.json") as f:
+with open("../data/processed/chunks_with_embeddings.json") as f:
     chunks = json.load(f)
 
 chunk_vectors = np.array([c["embedding"] for c in chunks])  # shape: (39, dim)
