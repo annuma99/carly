@@ -49,7 +49,7 @@ def search(query, top_k=3):
     results = []
     for i in ranked_idx:
         c = chunks[i]
-        label = f"Article {c['article']}" + (f", Section {c['section']}" if c["section"] else "")
+        label = c.get("citation") or (f"Article {c['article']}" + (f", Section {c['section']}" if c["section"] else ""))
         print(f"  [{scores[i]:.3f}] {label}: {c['text'][:90]}...")
         results.append(c)
     return results

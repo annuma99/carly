@@ -47,7 +47,7 @@ def cosine_similarity(query_vec, matrix):
     m_norm = matrix / np.linalg.norm(matrix, axis=1, keepdims=True)
     return m_norm @ q_norm
 
-def hybrid_search(query, top_k=3, semantic_weight=0.6, bm25_weight=0.4):
+def hybrid_search(query, top_k=3, semantic_weight=0.6, bm25_weight=0.4, verbose=True):
     # weights should sum to 1.0, but don't strictly have to -- they're
     # just relative trust levels between the two signals
     bm25_scores = bm25.get_scores(query.lower().split())
@@ -74,12 +74,16 @@ def hybrid_search(query, top_k=3, semantic_weight=0.6, bm25_weight=0.4):
         rrf_scores[idx] = rrf_scores.get(idx, 0) + semantic_weight * (1.0 / (RRF_K + rank))
 
     final_ranked = sorted(rrf_scores.items(), key=lambda x: x[1], reverse=True)
+    top_results = [chunks[idx] for idx, score in final_ranked[:top_k]]
 
-    print(f'\nQuery: "{query}"')
-    for idx, score in final_ranked[:top_k]:
-        c = chunks[idx]
-        label = f"Article {c['article']}" + (f", Section {c['section']}" if c["section"] else "")
-        print(f"  [RRF {score:.4f}] {label}: {c['text'][:90]}...")
+    if verbose:
+        print(f'\nQuery: "{query}"')
+        for idx, score in final_ranked[:top_k]:
+            c = chunks[idx]
+            label = c.get("citation") or (f"Article {c['article']}" + (f", Section {c['section']}" if c["section"] else ""))
+            print(f"  [RRF {score:.4f}] {label}: {c['text'][:90]}...")
+
+    return top_results  # list of chunk dicts -- what callers like generate_answer.py actually need
 
 if __name__ == "__main__":
     hybrid_search("what is a Recognized Student Organization")
