@@ -1,0 +1,8 @@
+anthropic
+flask
+flask-cors
+numpy
+pypdf
+python-dotenv
+rank-bm25
+voyageai
