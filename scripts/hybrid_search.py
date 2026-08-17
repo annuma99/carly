@@ -21,6 +21,7 @@ import numpy as np
 from dotenv import load_dotenv
 from rank_bm25 import BM25Okapi
 import voyageai
+from pathlib import Path
 
 load_dotenv()
 VOYAGE_API_KEY = os.getenv("VOYAGE_API_KEY")
@@ -31,7 +32,12 @@ client = voyageai.Client(api_key=VOYAGE_API_KEY)
 MODEL = "voyage-3"
 RRF_K = 60  # standard RRF constant; dampens the impact of very top ranks
 
-with open("../data/processed/chunks_with_embeddings.json") as f:
+# Locate the processed data directory relative to this file so the module
+# works regardless of the current working directory when Python is run.
+DATA_DIR = Path(__file__).resolve().parents[1] / "data" / "processed"
+CHUNKS_PATH = DATA_DIR / "chunks_with_embeddings.json"
+
+with open(CHUNKS_PATH) as f:
     chunks = json.load(f)
 
 texts = [c["text"] for c in chunks]

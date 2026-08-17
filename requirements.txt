@@ -6,3 +6,5 @@ pypdf
 python-dotenv
 rank-bm25
 voyageai
+gunicorn
+

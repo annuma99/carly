@@ -41,7 +41,7 @@
 
   .pond {
     isolation: isolate; position: relative; width: 100vw; height: 100vh; min-height: 560px; overflow: hidden;
-    background: #4aa5d8 url("../assets/pond_background.gif") center / cover no-repeat;
+    background: #4aa5d8 url("/assets/pond_background.gif") center / cover no-repeat;
   }
   .pond::before { display: none; }
   .pond::after {
@@ -232,7 +232,7 @@
 
     <section class="duck-stage enter" id="duck-stage" aria-label="Carly the duck">
       <div class="duck" aria-hidden="true">
-        <img id="duck-sprite" src="../assets/idle_duck.gif" alt="">
+        <img id="duck-sprite" src="/assets/idle_duck.gif" alt="">
       </div>
       <div class="wake"><svg viewBox="0 0 122 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 8 Q31 -2 61 8 T118 8" stroke="#eafcff" stroke-width="4" fill="none" stroke-linecap="round"/></svg></div>
     </section>
@@ -247,7 +247,7 @@
     </form>
   </main>
 <script>
-  const API_URL = "http://localhost:5001/ask";
+  const API_URL = "/ask";
   const sessionId = crypto.randomUUID();
   const DOCK_LEFT = "11%", DOCK_TOP = "50%";
   const duckStage = document.getElementById("duck-stage"); const inputBar = document.querySelector(".input-bar"); const form = document.getElementById("ask-form"); const input = document.getElementById("question-input"); const sendBtn = document.getElementById("send-btn"); const thinkingNote = document.getElementById("thinking-note"); const answerCard = document.getElementById("answer-card"); const answerContent = document.getElementById("answer-content");
