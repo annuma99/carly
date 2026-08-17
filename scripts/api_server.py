@@ -21,8 +21,9 @@ ASSETS_DIR = ROOT / "assets"
 app = Flask(__name__)
 CORS(app)  # allows the web UI to call this API
 
-# Serve the web UI (scripts/index.html) at the site root
+# Serve the web UI (scripts/index.html) at the site root and under index.html
 @app.route("/")
+@app.route("/index.html")
 def index():
     return send_from_directory(str(SCRIPTS_DIR), "index.html")
 
