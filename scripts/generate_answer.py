@@ -39,7 +39,7 @@ def format_context(chunks):
         blocks.append(f"[{label}]\n{c['text']}")
     return "\n\n---\n\n".join(blocks)
 
-def generate_answer(question, session_id="default", top_k=3, semantic_weight=0.6, bm25_weight=0.4):
+def generate_answer(question, session_id="default", top_k=15, semantic_weight=0.6, bm25_weight=0.4):
     # Step 0: turn a possibly-ambiguous follow-up into a standalone query
     # for retrieval. No-op (and no extra API call) if this is the first
     # question in the session.
