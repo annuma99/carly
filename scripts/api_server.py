@@ -15,7 +15,6 @@ from pathlib import Path
 import os
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPTS_DIR = ROOT / "scripts"
 ASSETS_DIR = ROOT / "assets"
 
 app = Flask(__name__)
@@ -25,7 +24,7 @@ CORS(app)  # allows the web UI to call this API
 @app.route("/")
 @app.route("/index.html")
 def index():
-    return send_from_directory(str(SCRIPTS_DIR), "index.html")
+    return send_from_directory(str(ROOT), "index.html")
 
 # Serve assets (images/gifs) at /assets/
 @app.route("/assets/<path:filename>")
@@ -49,6 +48,6 @@ def ask():
 
 if __name__ == "__main__":
     import os
-    port = int(os.environ.get("PORT", 5001))
+    port = int(os.environ.get("PORT", 5501))
     # bind to 0.0.0.0 so the service is reachable from outside the container/host
     app.run(host="0.0.0.0", port=port, debug=(os.environ.get("FLASK_DEBUG", "false").lower() == "true"))
