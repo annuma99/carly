@@ -373,7 +373,10 @@
       settleAtDock();
       await typeMarkdownInto(
         aBox,
-        "**Carly got tangled in the reeds.** Please make sure `api_server.py` is running, then try again.",
+        "**Carly got tangled in the reeds.** " +
+          (error instanceof TypeError
+            ? "Your browser could not reach Carly’s API. The service may be starting up, or the connection may be blocked. Please try again shortly."
+            : "The API returned an error: " + error.message),
         { speed: 8, onTick: scrollAnswerToBottom }
       );
     } finally {
