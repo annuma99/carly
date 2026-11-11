@@ -1,0 +1,2 @@
+[tool.vercel]
+entrypoint = "scripts.api_server:app"
