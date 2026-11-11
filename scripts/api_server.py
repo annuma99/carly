@@ -10,7 +10,7 @@ Requires: pip install flask flask-cors
 
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-from generate_answer import generate_answer
+from scripts.generate_answer import generate_answer
 from pathlib import Path
 import os
 
