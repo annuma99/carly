@@ -18,7 +18,17 @@ ROOT = Path(__file__).resolve().parents[1]
 ASSETS_DIR = ROOT / "assets"
 
 app = Flask(__name__)
-CORS(app, origins=["https://carly-the-parliamentarian.onrender.com"])  # allows the web UI to call this API
+allowed_origins = [
+    "https://carly-the-parliamentarian.onrender.com",
+    "https://carly-cqlr.vercel.app",
+]
+# Additional frontend domains can be configured without changing the code.
+allowed_origins.extend(
+    origin.strip().rstrip("/")
+    for origin in os.environ.get("CORS_ORIGINS", "").split(",")
+    if origin.strip()
+)
+CORS(app, resources={r"/ask": {"origins": allowed_origins}})
 
 # Serve the web UI (scripts/index.html) at the site root and under index.html
 @app.route("/")
