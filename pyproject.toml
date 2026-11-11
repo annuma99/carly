@@ -1,2 +1,17 @@
+[project]
+name = "carly"
+version = "0.1.0"
+dependencies = [
+    "anthropic",
+    "flask",
+    "flask-cors",
+    "numpy",
+    "pypdf",
+    "python-dotenv",
+    "rank-bm25",
+    "voyageai",
+    "gunicorn",
+]
+
 [tool.vercel]
 entrypoint = "scripts.api_server:app"
