@@ -11,7 +11,7 @@ text. Everything before this only ever searched/ranked EXISTING text.
 import os
 from dotenv import load_dotenv
 import anthropic
-from hybrid_search import hybrid_search
+from scripts.hybrid_search import hybrid_search
 from sessions import contextualize_query, format_history_for_prompt, add_turn
 
 load_dotenv()

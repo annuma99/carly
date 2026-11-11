@@ -18,7 +18,6 @@ import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-
 import voyageai
 from dotenv import load_dotenv
 from pypdf import PdfReader
